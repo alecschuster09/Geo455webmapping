@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Populating list</title>
+    </head>
+    <body>
+        <p>This is a list of some trips that I have been on in my lifetime!</p>
+        
+        <ul id="species"></ul> //convert to ordered list
+        
+        <p>It was created dynamically using JavaScript.</p>
+        <script>
+            var data = ["Peru", "Nepal", "St. Maarten", "Alaska", "Glacier National Park", "Yellowstone National Park", "Florida", "Rockey Mountain National Park", "Washington" ];
+            var html = "";
+            data.forEach(function(element) {
+                html += "<li><i>" + element + "</i></li>";
+            });
+            document.getElementById("species").innerHTML = html;
+        </script>
+        <p><a href="geo455_ex4.html">Back to Main Page</a></p>
+    </body>
+</html>
