@@ -1,0 +1,112 @@
+/* Page + full-screen map - Make the page tall enough for a full-screen map*/
+html, body {
+  height: 100%;
+}
+/* Basic styling for the whole page */
+body {
+  margin: 0;
+  background-color: whitesmoke;
+  font-family: "Gravitas one", serif;
+  color: black;
+}
+/* Make the map fill the entire browser window */
+#map {
+  position: fixed;
+    top: 85px;
+  right: 0;
+  bottom: 40px;
+  left: 307px; ; /* top:0; right:0; bottom:0; left:0 */
+}
+/*Style the title panel (overlay box)*/
+#title {
+ position: fixed;
+  top: 10px;
+  left: 0px;
+  bottom: 865px;
+  width: 1876px;
+  font-size: 2em;
+  text-align: center;
+  font-family: "Ubuntu", sans-serif;
+  letter-spacing: .04em;
+  margin: 0;
+  padding: 18px 15px;
+  background: rgba(4, 73, 16, 0.75);
+  border: 1px solid #777;
+  border-radius: 6px;
+  z-index: 800;
+}
+/*Style the description panel (overlay box)*/
+#description {
+  position: fixed;
+  left: 10px;
+  bottom: 20px;
+  width: 320px;
+  max-width: calc(100vw - 20px);
+  padding: 0 15px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #777;
+  border-radius: 6px;
+  z-index: 800;
+}
+/*Style the description panel (overlay box)*/
+#description {
+  position: fixed;
+  left: 10px;
+  bottom: 20px;
+  width: 320px;
+  max-width: calc(100vw - 20px);
+  padding: 0 15px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #777;
+  border-radius: 6px;
+  z-index: 800;
+}
+#description {
+  position: fixed;
+  top: 910px;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  max-width: calc(100vw - 20px);
+  padding: 0 15px;
+  background: rgba(4, 73, 16, 0.75);
+  z-index: 800;
+}
+#descriptiontwo {
+  position: fixed;
+  top: 85px;
+  left: 0px;
+  bottom: 40px;
+  width: 275px;
+  padding: 0 15px;
+  background: rgb(255, 255, 255);
+  border: 1px solid #777;
+  border-radius: 6px;
+  z-index: 800; 
+    
+}
+/*Make paragraph text inside the description readable */
+#description h2 {
+  font-size: 0.95rem;
+  line-height: 0.68;
+  text-align: center
+}
+/*Style links inside the description (and hover effect)*/
+#description a {
+  color: #005daa;
+  text-decoration: none;
+}
+
+#description a:hover {
+  text-decoration: underline;
+}
+figure figcaption {
+  font-family: "Ubuntu", sans-serif;
+  font-style: italic;/* change font */
+  font-size: 0.9em;                    /* optional size change */
+  text-align: center;                  /* center horizontally */
+  margin-top: 20px;                    /* move it lower */
+}
+#descriptiontwo p.back-link {
+  margin-top: 40px;   /* moves the link lower inside the box */
+}
