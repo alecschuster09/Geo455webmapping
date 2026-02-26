@@ -72,10 +72,10 @@ body {
 }
 #descriptiontwo {
   position: fixed;
-  top: 85px;
-  left: 0px;
-  bottom: 40px;
-  width: 275px;
+  top: 9%;
+  left: 0%;
+  bottom: 4%;
+  width: 20%;
   padding: 0 15px;
   background: rgb(255, 255, 255);
   border: 1px solid #777;
