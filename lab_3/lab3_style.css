@@ -37,9 +37,8 @@ body {
 /*Style the description panel (overlay box)*/
 #description {
   position: fixed;
-  left: 10px;
-  bottom: 20px;
-  width: 200px;
+  bottom: 100%;
+  width: 100%;
   max-width: calc(100vw - 20px);
   padding: 0 15px;
   background: rgba(255, 255, 255, 0.75);
