@@ -1,15 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Title</title>
-        <link rel="stylesheet" href="styles.css" />
-        <script src="script.js"></script>
-    </head>
-    <body>
-        <h1 class="title">Hello World</h1>
-        <div id="mainDiv">Hello Div</div>
-        <br />
-        <button onclick="buttonClicked()">Click me</button>
-    </body>
+<head>
+   <body>
+  <div id="map"></div>
+
+  <h1 id="title">Lab 4: Layer Grouping and WMS</h1>
+
+  <div id="description">
+    <h2>Lab 4 Contents</h2>
+    <p>In this assignment, we are working with layer controls. We have three layers, landmarks, basemap, and SRTM 30m hillshade map using WMS service. Landmarks are based on encyclopedia Britannica's entry on <a href="https://www.britannica.com/list/new-seven-wonders-of-the-world">New Seven Wonders of the World</a> and the images are linked from Wikipedia Common images </p>
+    <p>Map Credits: Alec Schuster</p> 
+     <p><a href="../index.html">Back to Main Page</a></p>
+  </div>
+       
+     
+       
+   
+       
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GEO 455: Lab 3</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  
+  <!-- Make sure you put the leaflet map library AFTER Leaflet's CSS --> 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+  
+  <!--Your choice of Google fonts- make sure to update in CSS file -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="lab4_style.css" />
+   </body>
+  <!-- Your map code  -->
+  <script src="lab4_map.js"></script>
+</head>
 </html>
