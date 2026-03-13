@@ -63,3 +63,10 @@ body {
 #description a:hover {
   text-decoration: underline;
 }
+
+.button-locate {
+  background: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px;
+}

@@ -13,13 +13,37 @@ var map = L.map("map", {
   layers: [streets, imagery,]
 });
 
+//add in full screen
+map.addControl(new L.Control.Fullscreen());
+
+// Create a FeatureGroup to store editable layers
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+// Add the draw control to the map
+var drawControl = new L.Control.Draw({
+  edit: {
+    featureGroup: drawnItems
+  }
+});
+map.addControl(drawControl);
+
+// Listen for when a new shape is created and add it to the drawnItems group
+map.on(L.Draw.Event.CREATED, function (e) {
+  var layer = e.layer;
+  drawnItems.addLayer(layer);
+});
+
+
 var homeCenter = map.getCenter();
 
 var homeZoom = map.getZoom(); 
 
+
 L.easyButton(('<img src="Home_icon_black.png", height=60%>'), function () {
   map.setView(homeCenter, homeZoom);
 }, "Home").addTo(map);
+
 
 /*Create custom popups with images*/
 var greatwallPopup = "Great Wall of China<br/><img src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Badaling_China_Great-Wall-of-China-04.jpg' alt='great wall wiki' width='150px'/>";
@@ -213,11 +237,22 @@ async function getISS() {
 getISS();
 setInterval(getISS, 1000);
 
-// Jump to ISS button (required feature)
-document.getElementById("btn-iss").addEventListener("click", function () {
-  var ll = issMarker.getLatLng();
-  map.setView([ll.lat, ll.lng], 4);
-});
+
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
+}).addTo(map);
+
+
+
+
+
+
+
+
+
+
 
 
 
