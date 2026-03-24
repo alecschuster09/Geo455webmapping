@@ -1,0 +1,71 @@
+{
+  "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+  "@id": "http://api.census.gov/data/2024/geoinfo.json",
+  "@type": "dcat:Catalog",
+  "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+  "describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+  "dataset": [
+    {
+      "c_vintage": 2024,
+      "c_dataset": [
+        "geoinfo"
+      ],
+      "c_geographyLink": "http://api.census.gov/data/2024/geoinfo/geography.json",
+      "c_variablesLink": "http://api.census.gov/data/2024/geoinfo/variables.json",
+      "c_tagsLink": "http://api.census.gov/data/2024/geoinfo/tags.json",
+      "c_examplesLink": "http://api.census.gov/data/2024/geoinfo/examples.json",
+      "c_groupsLink": "http://api.census.gov/data/2024/geoinfo/groups.json",
+      "c_sorts_url": "http://api.census.gov/data/2024/geoinfo/sorts.json",
+      "c_documentationLink": "https://www.census.gov/developer/",
+      "c_isAggregate": true,
+      "c_isAvailable": true,
+      "@type": "dcat:Dataset",
+      "title": "2024 Geography Information",
+      "accessLevel": "public",
+      "bureauCode": [
+        "006:07"
+      ],
+      "description": "This dataset will provide users with all geography levels for a given year as well as longitude/latitude and area (land and water) geographic information if available.",
+      "distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "accessURL": "http://api.census.gov/data/2024/geoinfo",
+          "description": "API endpoint",
+          "format": "API",
+          "mediaType": "application/json",
+          "title": "API endpoint"
+        }
+      ],
+      "contactPoint": {
+        "fn": "U.S. Census Bureau",
+        "hasEmail": "mailto:Census.data@census.gov"
+      },
+      "identifier": "https://api.census.gov/data/id/GEOINFO2024",
+      "keyword": [
+        "census"
+      ],
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modified": "2026-01-13 09:35:02.0",
+      "programCode": [
+        "006:007"
+      ],
+      "references": [
+        "https://www.census.gov/developers/"
+      ],
+      "spatial": "US",
+      "temporal": "2024/2024",
+      "publisher": {
+        "@type": "org:Organization",
+        "name": "U.S. Census Bureau",
+        "subOrganizationOf": {
+             "@type": "org:Organization",
+             "name": "U.S. Department Of Commerce",
+             "subOrganizationOf": {
+                 "@type": "org:Organization",
+                 "name": "U.S. Government"
+             }
+         }
+      }
+    }
+  ]
+}
