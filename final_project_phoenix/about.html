@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About – Marathons Around the World</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: #2c3e50;
+    }
+
+    nav {
+      background: white;
+      border-bottom: 2px solid #c0392b;
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .brand {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    nav .links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #2c3e50;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.2s, color 0.2s;
+    }
+    nav a:hover, nav a.active {
+      background: #c0392b;
+      color: white;
+    }
+    nav .course {
+      font-size: 0.85rem;
+      color: #999;
+      margin-left: 16px;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 28px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: white;
+      border-radius: 8px;
+      padding: 14px 18px;
+      text-align: center;
+      flex: 1;
+      min-width: 90px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    }
+    .stat .num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #c0392b;
+    }
+    .stat .lbl {
+      font-size: 0.7rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 3px;
+    }
+
+    .card {
+      background: white;
+      border-left: 4px solid #c0392b;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.07);
+    }
+    .card h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #c0392b;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #444;
+    }
+    .card ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .card ul li {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #999;
+      text-decoration: none;
+    }
+    .back:hover { color: #c0392b; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="brand">Marathons Around the World</span>
+    <div class="links">
+      <a href="final_project.html">🗺 Map</a>
+      <a href="about_the_map_final_project.html" class="active">📖 About</a>
+      <span class="course">GEO 455: Webmapping</span>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <h1>About the Map</h1>
+    <p class="subtitle">Created by Alec Schuster &nbsp;·&nbsp; GEO 455: Webmapping</p>
+
+    <div class="stats">
+      <div class="stat"><div class="num">10</div><div class="lbl">Marathons</div></div>
+      <div class="stat"><div class="num">8</div><div class="lbl">Countries</div></div>
+      <div class="stat"><div class="num">450k+</div><div class="lbl">Participants</div></div>
+      <div class="stat"><div class="num">26.2</div><div class="lbl">Miles Each</div></div>
+    </div>
+
+    <div class="card">
+      <h2>What &amp; Why</h2>
+      <p>This map shows the top 10 marathons in the world by participation. I ran my first marathon in 2025 and wanted to explore other major races — where they go, how hard they are, and when they happen. The goal is to help runners compare races and pick their next one.</p>
+    </div>
+
+    <div class="card">
+      <h2>Map Layers</h2>
+      <ul>
+        <li>📍 <strong>Marathon Locations</strong> — click for photo, participants, and official website</li>
+        <li>🔴 <strong>Race Routes</strong> — GPS-traced 26.2-mile courses from Strava</li>
+        <li>⭕ <strong>Proportional Circles</strong> — bigger circle = more participants</li>
+        <li>🎨 <strong>Course Difficulty</strong> — color-coded 1–5 rating (green = easy, red = very hard)</li>
+        <li>📅 <strong>Race Calendar</strong> — time slider reveals marathons month by month</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Data &amp; Methods</h2>
+      <ul>
+        <li>Route GPX files downloaded from Strava, converted to GeoJSON in ArcGIS Pro</li>
+        <li>Participant counts sourced from official race websites</li>
+        <li>Difficulty ratings and race months researched and added manually</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Limitations &amp; Next Steps</h2>
+      <ul>
+        <li>Only 10 races — a full global marathon dataset wasn't available</li>
+        <li>Participant counts are from a single year and may change</li>
+        <li>Would like to add elevation profile charts and improve mobile layout</li>
+      </ul>
+    </div>
+
+    <a class="back" href="final_project.html">← Back to Map</a>
+
+  </div>
+
+</body>
+</html>
