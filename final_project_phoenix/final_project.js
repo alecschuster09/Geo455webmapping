@@ -7,9 +7,9 @@ var streets = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{
   attribution: '&copy; OpenStreetMap &copy; CARTO'
 }).addTo(map);
 
-var TopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-  maxZoom: 17,
-  attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap (CC-BY-SA)'
+var TopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 18,
+  attribution: 'Tiles &copy; Esri'
 });
 
 // ─────────────────────────────────────────────
@@ -34,21 +34,37 @@ L.easyButton('<img src="images/globe_icon.png" style="height:70%">', function() 
 L.control.scale({ position: 'bottomright', metric: true, imperial: true }).addTo(map);
 
 // ─────────────────────────────────────────────
-// MARATHON METADATA  (difficulty + month added here)
-// difficulty scale 1–5:  1 = Very Easy, 2 = Easy, 3 = Moderate, 4 = Hard, 5 = Very Hard
-// month = numeric month the race is held
+// MARATHON METADATA
 // ─────────────────────────────────────────────
 var marathonMeta = {
-  "Berlin Marathon":        { difficulty: 1, month: 9  },  // Sept  – famously flat
-  "Boston Marathon":        { difficulty: 5, month: 4  },  // April – hills, Heartbreak Hill
-  "Chicago Marathon":       { difficulty: 1, month: 10 },  // Oct   – flat city loop
-  "London Marathon":        { difficulty: 2, month: 4  },  // April – mostly flat
-  "New York City Marathon":  { difficulty: 4, month: 11 },  // Nov   – 5 bridges, rolling
-  "Osaka Marathon":         { difficulty: 2, month: 3  },  // March – flat urban
-  "Paris Marathon":         { difficulty: 2, month: 4  },  // April – gently rolling
-  "Sydney Marathon":        { difficulty: 3, month: 9  },  // Sept  – some hills, bridge
-  "Tokyo Marathon":         { difficulty: 2, month: 3  },  // March – flat city
-  "Valencia Marathon":      { difficulty: 1, month: 12 }   // Dec   – certified flat/fast
+  "Berlin Marathon":         { difficulty: 1, month: 9  },
+  "Boston Marathon":         { difficulty: 5, month: 4  },
+  "Chicago Marathon":        { difficulty: 1, month: 10 },
+  "London Marathon":         { difficulty: 2, month: 4  },
+  "New York City Marathon":  { difficulty: 4, month: 11 },
+  "Osaka Marathon":          { difficulty: 2, month: 3  },
+  "Paris Marathon":          { difficulty: 2, month: 4  },
+  "Sydney Marathon":         { difficulty: 3, month: 9  },
+  "Tokyo Marathon":          { difficulty: 2, month: 3  },
+  "Valencia Marathon":       { difficulty: 1, month: 12 }
+};
+
+// ─────────────────────────────────────────────
+// DIFFICULTY COLORS + LABELS
+// ─────────────────────────────────────────────
+var difficultyColors = {
+  1: '#2ecc71',
+  2: '#a8d08d',
+  3: '#f1c40f',
+  4: '#e67e22',
+  5: '#e74c3c'
+};
+var difficultyLabels = {
+  1: 'Very Easy',
+  2: 'Easy',
+  3: 'Moderate',
+  4: 'Hard',
+  5: 'Very Hard'
 };
 
 // Helper: parse participant strings like "54,062" → 54062
@@ -56,24 +72,57 @@ function parseParticipants(str) {
   return parseInt(String(str).replace(/,/g, ''), 10);
 }
 
-// ─────────────────────────────────────────────
-// ROUTE LAYERS  (unchanged from your original)
-// ─────────────────────────────────────────────
-var routeStyle = { color: '#e74c3c', weight: 3, opacity: 0.8 };
-
-var berlinMarathon   = L.geoJSON(berlinData,   { style: routeStyle }).addTo(map);
-var bostonMarathon   = L.geoJSON(bostonData,   { style: routeStyle }).addTo(map);
-var chicagoMarathon  = L.geoJSON(chicagoData,  { style: routeStyle }).addTo(map);
-var londonMarathon   = L.geoJSON(londonData,   { style: routeStyle }).addTo(map);
-var nycMarathon      = L.geoJSON(nycData,      { style: routeStyle }).addTo(map);
-var osakaMarathon    = L.geoJSON(osakaData,    { style: routeStyle }).addTo(map);
-var parisMarathon    = L.geoJSON(parisData,    { style: routeStyle }).addTo(map);
-var sydneyMarathon   = L.geoJSON(sydneyData,   { style: routeStyle }).addTo(map);
-var tokyoMarathon    = L.geoJSON(tokyoData,    { style: routeStyle }).addTo(map);
-var valenciaMarathon = L.geoJSON(valenciaData, { style: routeStyle }).addTo(map);
+// Helper: get difficulty color by marathon name
+function getDifficultyColor(name) {
+  var diff = (marathonMeta[name] || {}).difficulty || 3;
+  return difficultyColors[diff];
+}
 
 // ─────────────────────────────────────────────
-// POINT MARKERS  (your original layer)
+// ROUTE LAYERS  (colored by difficulty)
+// ─────────────────────────────────────────────
+function makeRouteLayer(data, name) {
+  var diff  = (marathonMeta[name] || {}).difficulty || 3;
+  var color = difficultyColors[diff];
+
+  return L.geoJSON(data, {
+    style: {
+      color:   color,
+      weight:  3,
+      opacity: 0.8
+    },
+    onEachFeature: function(feature, layer) {
+      layer.bindPopup(
+        '<strong>' + name + '</strong><br>' +
+        'Course Difficulty: <b>' + difficultyLabels[diff] + '</b> (' + diff + '/5)'
+      );
+      layer.on({
+        mouseover: function() {
+          this.setStyle({ weight: 7, opacity: 1 });
+          this.openPopup();
+        },
+        mouseout: function() {
+          this.setStyle({ weight: 3, opacity: 0.8 });
+          this.closePopup();
+        }
+      });
+    }
+  }).addTo(map);
+}
+
+var berlinMarathon   = makeRouteLayer(berlinData,   "Berlin Marathon");
+var bostonMarathon   = makeRouteLayer(bostonData,   "Boston Marathon");
+var chicagoMarathon  = makeRouteLayer(chicagoData,  "Chicago Marathon");
+var londonMarathon   = makeRouteLayer(londonData,   "London Marathon");
+var nycMarathon      = makeRouteLayer(nycData,      "New York City Marathon");
+var osakaMarathon    = makeRouteLayer(osakaData,    "Osaka Marathon");
+var parisMarathon    = makeRouteLayer(parisData,    "Paris Marathon");
+var sydneyMarathon   = makeRouteLayer(sydneyData,   "Sydney Marathon");
+var tokyoMarathon    = makeRouteLayer(tokyoData,    "Tokyo Marathon");
+var valenciaMarathon = makeRouteLayer(valenciaData, "Valencia Marathon");
+
+// ─────────────────────────────────────────────
+// POINT MARKERS
 // ─────────────────────────────────────────────
 var pointsLayer = L.geoJSON(marathonPoints, {
   onEachFeature: function(feature, layer) {
@@ -90,18 +139,22 @@ var pointsLayer = L.geoJSON(marathonPoints, {
 }).addTo(map);
 
 // ─────────────────────────────────────────────
-// LAYER 1 – PROPORTIONAL CIRCLES (by participants)
+// LAYER 1 – PROPORTIONAL CIRCLES
 // ─────────────────────────────────────────────
+var minParticipants = Infinity;
 var maxParticipants = 0;
+
 marathonPoints.features.forEach(function(f) {
   var n = parseParticipants(f.properties.participants);
   if (n > maxParticipants) maxParticipants = n;
+  if (n < minParticipants) minParticipants = n;
 });
 
 function propRadius(participants) {
-  var n = parseParticipants(participants);
-  // Scale so the largest circle (NYC ~59k) gets radius 35px
-  return Math.sqrt(n / maxParticipants) * 35;
+  var n    = parseParticipants(participants);
+  var minR = 8, maxR = 40;
+  var t    = (n - minParticipants) / (maxParticipants - minParticipants);
+  return minR + t * (maxR - minR);
 }
 
 var propCircles = L.geoJSON(marathonPoints, {
@@ -137,21 +190,6 @@ var propCircles = L.geoJSON(marathonPoints, {
 // ─────────────────────────────────────────────
 // LAYER 2 – COURSE DIFFICULTY
 // ─────────────────────────────────────────────
-var difficultyColors = {
-  1: '#2ecc71',   // Very Easy  – green
-  2: '#a8d08d',   // Easy       – light green
-  3: '#f1c40f',   // Moderate   – yellow
-  4: '#e67e22',   // Hard       – orange
-  5: '#e74c3c'    // Very Hard  – red
-};
-var difficultyLabels = {
-  1: 'Very Easy',
-  2: 'Easy',
-  3: 'Moderate',
-  4: 'Hard',
-  5: 'Very Hard'
-};
-
 var difficultyLayer = L.geoJSON(marathonPoints, {
   pointToLayer: function(feature, latlng) {
     var name = feature.properties.name;
@@ -180,9 +218,8 @@ var difficultyLayer = L.geoJSON(marathonPoints, {
 });
 
 // ─────────────────────────────────────────────
-// LAYER 3 – TIME SLIDER  (January → December)
+// LAYER 3 – TIME SLIDER
 // ─────────────────────────────────────────────
-// Build an enriched copy of marathonPoints with meta injected
 var enrichedFeatures = marathonPoints.features.map(function(f) {
   var meta = marathonMeta[f.properties.name] || {};
   return Object.assign({}, f, {
@@ -198,34 +235,37 @@ var monthNames = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-// Layer group that holds whatever the slider is currently showing
 var sliderLayer = L.layerGroup();
 
 function updateSlider(month) {
   sliderLayer.clearLayers();
   enrichedFeatures.forEach(function(f) {
     if (f.properties.month <= month) {
-      var p = f.properties;
+      var p      = f.properties;
       var coords = f.geometry.coordinates;
-      var marker = L.circleMarker([coords[1], coords[0]], {
-        radius:      12,
-        fillColor:   '#8e44ad',
-        color:       '#4a235a',
-        weight:      1.5,
-        fillOpacity: 0.75
+
+      var marker = L.marker([coords[1], coords[0]], {
+        icon: L.divIcon({
+          html: '<div style="font-size:24px;line-height:1;filter:drop-shadow(1px 1px 1px rgba(0,0,0,0.4));">🏃</div>',
+          className:   '',
+          iconSize:    [24, 24],
+          iconAnchor:  [12, 12],
+          popupAnchor: [0, -14]
+        })
       });
+
       marker.bindPopup(
         '<strong>' + p.name + '</strong><br>' +
         'Race Month: <b>' + monthNames[p.month] + '</b><br>' +
         'Location: ' + p.location + '<br>' +
         'Participants: ' + p.participants
       );
+
       sliderLayer.addLayer(marker);
     }
   });
 }
 
-// Custom Leaflet slider control
 var SliderControl = L.Control.extend({
   options: { position: 'bottomright' },
   onAdd: function() {
@@ -242,17 +282,14 @@ var SliderControl = L.Control.extend({
         '<div class="slider-hint">Drag to reveal marathons by month</div>' +
       '</div>';
 
-    // Prevent map from intercepting mouse/touch events on the slider
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.disableScrollPropagation(container);
-
     return container;
   }
 });
 
 var sliderControl = new SliderControl();
 
-// Wire up slider events AFTER it has been added to the map
 function initSliderEvents() {
   var slider  = document.getElementById('monthSlider');
   var display = document.getElementById('sliderMonthDisplay');
@@ -262,7 +299,6 @@ function initSliderEvents() {
     display.textContent = monthNames[m];
     updateSlider(m);
   });
-  // Initialise to January
   updateSlider(1);
 }
 
@@ -286,60 +322,22 @@ map.addControl(searchControl);
 // LAYER CONTROL
 // ─────────────────────────────────────────────
 var baseLayers = {
-  'Streetmap':   streets,
-  'Topography':  TopoMap
+  'Streetmap':  streets,
+  'Topography': TopoMap
 };
 
 var overlays = {
-  '<span class="lc-icon">📍</span> Marathon Locations':          pointsLayer,
+  '<span class="lc-icon">📍</span> Marathon Locations':           pointsLayer,
   '<span class="lc-icon">⭕</span> Participation (Prop Circles)': propCircles,
-  '<span class="lc-icon">🎨</span> Course Difficulty':           difficultyLayer,
-  '<span class="lc-icon">📅</span> Race Calendar (Time Slider)': sliderLayer
+  '<span class="lc-icon">🎨</span> Course Difficulty':            difficultyLayer,
+  '<span class="lc-icon">📅</span> Race Calendar (Time Slider)':  sliderLayer
 };
 
 var layerControl = L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
 
 // ─────────────────────────────────────────────
-// LEGEND PANEL (rendered in sidebar)
+// LEGEND
 // ─────────────────────────────────────────────
-function buildLegend() {
-  var el = document.getElementById('legend-panel');
-  if (!el) return;
-
-  el.innerHTML =
-    // Proportional circles legend
-    '<div class="legend-section">' +
-      '<div class="legend-title">⭕ Participation (Proportional Circles)</div>' +
-      '<div class="legend-subtitle">Circle size = number of finishers</div>' +
-      '<div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:6px;">' +
-        legendCircle(10, '#1a6fc4', '~30k') +
-        legendCircle(20, '#1a6fc4', '~45k') +
-        legendCircle(28, '#1a6fc4', '~59k') +
-      '</div>' +
-    '</div>' +
-
-    // Difficulty legend
-    '<div class="legend-section">' +
-      '<div class="legend-title">🎨 Course Difficulty</div>' +
-      Object.keys(difficultyColors).map(function(k) {
-        return '<div class="legend-box">' +
-          '<span class="legend-color" style="background:' + difficultyColors[k] + ';border-radius:50%;"></span>' +
-          difficultyLabels[k] +
-        '</div>';
-      }).join('') +
-    '</div>' +
-
-    // Time slider legend
-    '<div class="legend-section">' +
-      '<div class="legend-title">📅 Race Calendar (Time Slider)</div>' +
-      '<div class="legend-box">' +
-        '<span class="legend-color" style="background:#8e44ad;border-radius:50%;"></span>' +
-        'Marathon visible in selected month' +
-      '</div>' +
-      '<div class="legend-subtitle">Use the slider (bottom-right) to filter by month.</div>' +
-    '</div>';
-}
-
 function legendCircle(r, color, label) {
   var d = r * 2;
   return '<div style="text-align:center;">' +
@@ -351,13 +349,48 @@ function legendCircle(r, color, label) {
   '</div>';
 }
 
+function buildLegend() {
+  var el = document.getElementById('legend-panel');
+  if (!el) return;
+
+  el.innerHTML =
+    '<div class="legend-section">' +
+      '<div class="legend-title">⭕ Participation (Proportional Circles)</div>' +
+      '<div class="legend-subtitle">Circle size = number of finishers</div>' +
+      '<div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:6px;">' +
+        legendCircle(8,  '#1a6fc4', '~32k') +
+        legendCircle(24, '#1a6fc4', '~45k') +
+        legendCircle(40, '#1a6fc4', '~59k') +
+      '</div>' +
+    '</div>' +
+
+    '<div class="legend-section">' +
+      '<div class="legend-title">🎨 Course Difficulty</div>' +
+      '<div class="legend-subtitle">Circle + route color = difficulty rating</div>' +
+      Object.keys(difficultyColors).map(function(k) {
+        return '<div class="legend-box">' +
+          '<span class="legend-color" style="background:' + difficultyColors[k] + ';border-radius:50%;"></span>' +
+          difficultyLabels[k] +
+        '</div>';
+      }).join('') +
+    '</div>' +
+
+    '<div class="legend-section">' +
+      '<div class="legend-title">📅 Race Calendar (Time Slider)</div>' +
+      '<div class="legend-box">' +
+        '<span style="font-size:20px;line-height:1;filter:drop-shadow(1px 1px 1px rgba(0,0,0,0.4));">🏃</span>' +
+        'Marathon visible in selected month' +
+      '</div>' +
+      '<div class="legend-subtitle">Use the slider (bottom-right) to filter by month.</div>' +
+    '</div>';
+}
+
 // ─────────────────────────────────────────────
-// SHOW / HIDE SLIDER CONTROL WITH LAYER TOGGLE
+// SHOW / HIDE SLIDER WITH LAYER TOGGLE
 // ─────────────────────────────────────────────
 map.on('overlayadd', function(e) {
   if (e.layer === sliderLayer) {
     sliderControl.addTo(map);
-    // slight delay so the DOM element exists
     setTimeout(initSliderEvents, 50);
   }
 });
